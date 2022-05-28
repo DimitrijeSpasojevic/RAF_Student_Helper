@@ -4,4 +4,17 @@
     <string name="notes">Notes</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
+    <string name="professor">Professor</string>
+    <string name="course">Course</string>
+    <string name="day">day</string>
+    <string name="group">group</string>
+    <string-array name="Languages">
+        <item>Java</item>
+        <item>Kotlin</item>
+        <item>Swift</item>
+        <item>Python</item>
+        <item>Scala</item>
+        <item>Perl</item>
+    </string-array>
+
 </resources>

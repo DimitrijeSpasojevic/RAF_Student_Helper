@@ -9,6 +9,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import rs.raf.rafstudenthelper.modules.movieModule
 import rs.raf.rafstudenthelper.modules.coreModule
+import rs.raf.rafstudenthelper.modules.noteModule
 import timber.log.Timber
 
 class RAFStudentHelperApplication : Application() {
@@ -30,7 +31,8 @@ class RAFStudentHelperApplication : Application() {
     private fun initKoin() {
         val modules = listOf(
             coreModule,
-            movieModule
+            movieModule,
+            noteModule
         )
         startKoin {
             androidLogger(Level.ERROR)

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +53,28 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private fun initUi() {
         initRecycler()
         initListeners()
+        initSpinner()
+    }
+
+    private fun initSpinner(){
+        val languages = resources.getStringArray(R.array.Languages)
+
+        val spGrupa = binding.spGrupa
+        if (spGrupa != null) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item, languages
+            )
+            spGrupa.adapter = adapter
+        }
+        val spDan = binding.spDan
+        if (spDan != null) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item, languages
+            )
+            spDan.adapter = adapter
+        }
     }
 
     private fun initRecycler() {
@@ -104,7 +126,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun showLoadingState(loading: Boolean) {
-        binding.inputEt.isVisible = !loading
+        binding.inputProfesor.isVisible = !loading
+        binding.inputPredmet.isVisible = !loading
         binding.listRv.isVisible = !loading
         binding.loadingPb.isVisible = loading
     }

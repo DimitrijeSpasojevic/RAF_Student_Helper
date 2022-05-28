@@ -1,6 +1,5 @@
 package rs.raf.rafstudenthelper.presentation.viewmodel
 
-import android.graphics.Movie
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
