@@ -9,5 +9,5 @@ data class NoteEntity (
     val id: Long? = null,
     val title: String,
     val content: String,
-    val isArchived: Boolean = false,
+    val isArchived: Boolean
 )

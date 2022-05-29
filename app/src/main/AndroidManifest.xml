@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vezbe11" >
+        <activity android:name=".presentation.view.activities.NewNoteActivity"/>
+        <activity android:name=".presentation.view.activities.EditNoteActivity"/>
         <activity android:name="rs.raf.rafstudenthelper.presentation.view.activities.MainActivity"
             android:exported="true">
             <intent-filter>

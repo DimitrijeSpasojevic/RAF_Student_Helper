@@ -1,8 +1,8 @@
 package rs.raf.rafstudenthelper.presentation.view.fragments
 
-import android.app.ProgressDialog.show
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log.e
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,20 +10,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.Dispatchers.Main
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.rafstudenthelper.R
 import rs.raf.rafstudenthelper.data.models.Note
+import rs.raf.rafstudenthelper.data.models.NoteEntity
 import rs.raf.rafstudenthelper.databinding.FragmentNotesBinding
-import rs.raf.rafstudenthelper.presentation.contract.MainContract
 import rs.raf.rafstudenthelper.presentation.contract.NoteContract
-import rs.raf.rafstudenthelper.presentation.view.recycler.adapter.MovieAdapter
+import rs.raf.rafstudenthelper.presentation.view.activities.EditNoteActivity
+import rs.raf.rafstudenthelper.presentation.view.activities.NewNoteActivity
 import rs.raf.rafstudenthelper.presentation.view.recycler.adapter.NoteAdapter
-import rs.raf.rafstudenthelper.presentation.view.states.AddCourseState
-import rs.raf.rafstudenthelper.presentation.view.states.AddNoteState
+import rs.raf.rafstudenthelper.presentation.view.recycler.consumer.ClickConsumer
 import rs.raf.rafstudenthelper.presentation.view.states.NotesState
-import rs.raf.rafstudenthelper.presentation.viewmodel.MainViewModel
+import rs.raf.rafstudenthelper.presentation.view.states.UpdateNoteState
 import rs.raf.rafstudenthelper.presentation.viewmodel.NoteViewModel
-import timber.log.Timber
 import java.util.*
 
 class InputFragment : Fragment(R.layout.fragment_notes) {
@@ -37,6 +37,7 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
     private val binding get() = _binding!!
 
     private lateinit var adapter: NoteAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,8 +61,10 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
     private fun initUi() {
         initRecycler()
         binding.btnAddNewNote.setOnClickListener{
-            noteViewModel.addNote(Note("Proba-Nalsov prvog nota", "Dugacak tekst prvog nota"))
+            val intent = Intent (activity, NewNoteActivity::class.java)
+            activity?.startActivity(intent)
         }
+
 //        binding.addBtn.setOnClickListener {
 //            val input = binding.inputEt.text.toString()
 //            if (input.isBlank()) {
@@ -83,7 +86,24 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
 
     private fun initRecycler() {
         binding.listRvNote.layoutManager = LinearLayoutManager(context)
-        adapter = NoteAdapter()
+        adapter = NoteAdapter(NoteAdapter.OnClickListener {
+            when (it.click) {
+                ClickConsumer.Click.ARCHIVE -> {
+                    it.note.isArchived = !it.note.isArchived
+                    noteViewModel.updateNote(NoteEntity(it.note.id,it.note.title,it.note.content,it.note.isArchived))
+                }
+                ClickConsumer.Click.EDIT -> {
+                    val intent = Intent (activity, EditNoteActivity::class.java)
+                    intent.putExtra("id",it.note.id)
+                    intent.putExtra("content",it.note.content)
+                    intent.putExtra("title",it.note.title)
+                    activity?.startActivity(intent)
+                }
+                ClickConsumer.Click.DELETE -> {
+                    noteViewModel.deleteNote(NoteEntity(it.note.id,it.note.title,it.note.content,it.note.isArchived))
+                }
+            }
+        })
         binding.listRvNote.adapter = adapter
     }
 
@@ -91,6 +111,17 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
         noteViewModel.notesState.observe(viewLifecycleOwner, Observer {
             renderState(it)
         })
+
+//        noteViewModel.updateNoteState.observe(viewLifecycleOwner, Observer {
+//            when(it){
+//                is UpdateNoteState.Success ->{
+//                    Log.e("SUCCCCC","afafaf")
+//                }
+//                is UpdateNoteState.Error -> {
+//                    Log.e("ERRRR","afafaf")
+//                }
+//            }
+//        })
 
         noteViewModel.getAllNotes()
     }
@@ -100,7 +131,6 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
             is NotesState.Success -> {
                 Toast.makeText(context, "Notes Succesed", Toast.LENGTH_SHORT)
                     .show()
-//                showLoadingState(false)
                 adapter.submitList(state.notes)
             }
             is NotesState.Error -> Toast.makeText(context, "Error happened", Toast.LENGTH_SHORT)
@@ -111,6 +141,7 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
                 .show()
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

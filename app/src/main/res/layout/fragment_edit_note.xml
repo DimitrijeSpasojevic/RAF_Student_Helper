@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="@string/title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -23,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:inputType="textMultiLine"
         android:lines="22"
-        android:hint="@string/content"
         android:maxLines="25"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
@@ -31,7 +29,7 @@
         />
 
     <Button
-        android:id="@+id/btnOdustani"
+        android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
@@ -41,11 +39,11 @@
         app:layout_constraintTop_toBottomOf="@id/noteContent" />
 
     <Button
-        android:id="@+id/btnIzmeni"
+        android:id="@+id/btnEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
-        android:text="@string/save"
+        android:text="@string/edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noteContent" />

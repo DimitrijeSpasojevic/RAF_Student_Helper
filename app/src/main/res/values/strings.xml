@@ -7,7 +7,12 @@
     <string name="professor">Professor</string>
     <string name="course">Course</string>
     <string name="day">day</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
+    <string name="edit">edit</string>
     <string name="group">group</string>
+    <string name="title">title</string>
+    <string name="content">content</string>
     <string-array name="Languages">
         <item>Java</item>
         <item>Kotlin</item>

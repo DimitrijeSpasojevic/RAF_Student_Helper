@@ -1,7 +1,6 @@
 package rs.raf.rafstudenthelper.presentation.viewmodel
 
-import android.widget.Toast
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -9,14 +8,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import rs.raf.rafstudenthelper.data.models.Note
+import rs.raf.rafstudenthelper.data.models.NoteEntity
 import rs.raf.rafstudenthelper.data.repositories.NoteRepository
 import rs.raf.rafstudenthelper.presentation.contract.NoteContract
-import rs.raf.rafstudenthelper.presentation.view.states.AddCourseState
 import rs.raf.rafstudenthelper.presentation.view.states.AddNoteState
-import rs.raf.rafstudenthelper.presentation.view.states.CoursesState
 import rs.raf.rafstudenthelper.presentation.view.states.NotesState
+import rs.raf.rafstudenthelper.presentation.view.states.UpdateNoteState
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class NoteViewModel (
@@ -26,6 +24,7 @@ class NoteViewModel (
     private val subscriptions = CompositeDisposable()
     override val notesState: MutableLiveData<NotesState> = MutableLiveData()
     override val addDone: MutableLiveData<AddNoteState> = MutableLiveData()
+    override val updateNoteState: MutableLiveData<UpdateNoteState> = MutableLiveData()
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
@@ -53,6 +52,44 @@ class NoteViewModel (
                 }
             )
         subscriptions.add(subscription)
+    }
+
+    override fun deleteNote(note: NoteEntity) {
+        val subscription = noteRepository
+            .deleteNote(note)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    addDone.value = AddNoteState.Success
+                },
+                {
+                    addDone.value = AddNoteState.Error("Error with delete")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+
+    override fun updateNote(note: NoteEntity) {
+
+        val subscription = noteRepository
+            .updateNote(note)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    notesState.value = NotesState.Loading
+                    updateNoteState.value = UpdateNoteState.Success
+                },
+                {
+                    updateNoteState.value = UpdateNoteState.Error("Error with update")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+        getAllNotes()
     }
 
     override fun getAllNotes() {
@@ -92,6 +129,7 @@ class NoteViewModel (
             )
         subscriptions.add(subscription)
     }
+
 
     override fun onCleared() {
         super.onCleared()
