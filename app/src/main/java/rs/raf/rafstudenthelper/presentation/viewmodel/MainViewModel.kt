@@ -1,11 +1,14 @@
 package rs.raf.rafstudenthelper.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import org.koin.core.KoinApplication.Companion.init
 import rs.raf.rafstudenthelper.data.models.Course
 import rs.raf.rafstudenthelper.data.models.Resource
 import rs.raf.rafstudenthelper.data.repositories.CourseRepository
@@ -24,6 +27,9 @@ class MainViewModel(
     override val addDone: MutableLiveData<AddCourseState> = MutableLiveData()
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
+
+    override var days : List<String> = listOf()
+    override var groups : List<String> = listOf()
 
     init {
         val subscription = publishSubject
@@ -73,6 +79,24 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    override fun getAllFiltered(name: String, group: String, day: String, professor: String) {
+        val subscription = courseRepository
+            .getAllFiltered(name, group, day, professor)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    coursesState.value =  CoursesState.Loading
+                    coursesState.value = CoursesState.Success(it)
+                },
+                {
+                    coursesState.value = CoursesState.Error("Error happened while fetching data from db")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun getAllCourses() {
         val subscription = courseRepository
             .getAll()
@@ -105,6 +129,39 @@ class MainViewModel(
                 },
                 {
                     addDone.value = AddCourseState.Error("Error happened while adding movie")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getAllDays() {
+        val subscription = courseRepository
+            .getAllDays()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    days = it
+                    Log.e("tag2", "ovde2 " + days)
+                },
+                {
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getAllGroups() {
+        val subscription = courseRepository
+            .getAllGroups()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    groups = it
+                },
+                {
                     Timber.e(it)
                 }
             )

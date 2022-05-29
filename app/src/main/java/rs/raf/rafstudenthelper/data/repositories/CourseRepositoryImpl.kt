@@ -58,6 +58,21 @@ class CourseRepositoryImpl(
 //            }
     }
 
+    override fun getAllFiltered(
+        name: String,
+        group: String,
+        day: String,
+        professor: String
+    ): Observable<List<Course>> {
+        return localDataSource
+            .getAllFiltered(name,group,day, professor)
+            .map {
+                it.map {
+                    Course(it.predmet,it.tip,it.nastavnik,it.grupe,it.dan,it.termin,it.ucionica)
+                }
+            }
+    }
+
     override fun getAll(): Observable<List<Course>> {
         return localDataSource
             .getAll()
@@ -84,6 +99,16 @@ class CourseRepositoryImpl(
         ucionica = course.ucionica)
         return localDataSource
             .insert(courseEntity)
+    }
+
+    override fun getAllGroups(): Observable<List<String>> {
+        return localDataSource
+            .getAllGroups()
+    }
+
+    override fun getAllDays(): Observable<List<String>> {
+        return localDataSource
+            .getAllDays()
     }
 
 }

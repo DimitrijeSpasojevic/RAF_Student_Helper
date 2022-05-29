@@ -17,6 +17,12 @@ abstract class CourseDao {
     @Query("SELECT * FROM courses")
     abstract fun getAll(): Observable<List<CourseEntity>>
 
+    @Query("SELECT grupe FROM courses")
+    abstract fun getAllGroups(): Observable<List<String>>
+
+    @Query("SELECT dan FROM courses")
+    abstract fun getAllDays(): Observable<List<String>>
+
     @Query("DELETE FROM courses")
     abstract fun deleteAll()
 
@@ -28,5 +34,12 @@ abstract class CourseDao {
 
     @Query("SELECT * FROM courses WHERE predmet LIKE :name || '%'")
     abstract fun getByName(name: String): Observable<List<CourseEntity>>
+
+    @Query("SELECT * FROM courses" +
+            " WHERE " + "(" + " predmet LIKE :name || '%' OR :name IS NULL" + ")" +
+            "AND " + "(" + " grupe LIKE :group || '%' OR :group IS NULL" + ")" +
+            "AND " + "(" + " dan LIKE :day || '%' OR :day IS NULL" + ")" +
+            "AND " + "(" + " nastavnik LIKE :professor || '%' OR :professor IS NULL" + ")")
+    abstract fun getAllFiltered(name: String, group: String, day: String, professor: String): Observable<List<CourseEntity>>
 
 }
