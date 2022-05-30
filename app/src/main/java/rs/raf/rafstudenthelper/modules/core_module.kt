@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import rs.raf.rafstudenthelper.BuildConfig
+import rs.raf.rafstudenthelper.data.converters.Converters
 import rs.raf.rafstudenthelper.data.datasources.local.CourseDataBase
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -27,6 +28,7 @@ val coreModule = module {
     single { Room.databaseBuilder(androidContext(), CourseDataBase::class.java, "CourseDb")
         .fallbackToDestructiveMigration()
         .build() }
+
 
     single { createRetrofit(moshi = get(), httpClient = get()) }
 

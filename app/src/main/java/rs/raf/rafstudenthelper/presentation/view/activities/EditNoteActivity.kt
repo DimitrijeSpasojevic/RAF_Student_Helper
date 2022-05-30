@@ -1,6 +1,5 @@
 package rs.raf.rafstudenthelper.presentation.view.activities
 
-import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
@@ -44,7 +43,9 @@ class EditNoteActivity : AppCompatActivity() {
 
         with(binding){
             btnEdit.setOnClickListener {
-                noteViewModel.updateNote(NoteEntity(id = id ,title = noteTitle.text.toString(), content = noteContent.text.toString(), isArchived = false))
+                noteViewModel.updateNote(NoteEntity(
+                    id = id ,
+                    title = noteTitle.text.toString(), content = noteContent.text.toString(), isArchived = false))
                 finish()
             }
 

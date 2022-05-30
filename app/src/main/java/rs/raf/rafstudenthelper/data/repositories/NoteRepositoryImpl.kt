@@ -1,5 +1,6 @@
 package rs.raf.rafstudenthelper.data.repositories
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Observable
 import rs.raf.rafstudenthelper.data.datasources.local.NoteDao
@@ -31,7 +32,7 @@ class NoteRepositoryImpl(
             .getArchived(name)
             .map {
                 it.map {
-                    NoteWithId(it.id,it.title,it.content, it.isArchived)
+                    NoteWithId(it.id, it.title, it.content, it.isArchived, it.date)
                 }
             }
     }
@@ -41,7 +42,7 @@ class NoteRepositoryImpl(
             .getUnArchived(name)
             .map {
                 it.map {
-                    NoteWithId(it.id,it.title,it.content, it.isArchived)
+                    NoteWithId(it.id, it.title, it.content, it.isArchived, it.date)
                 }
             }
     }

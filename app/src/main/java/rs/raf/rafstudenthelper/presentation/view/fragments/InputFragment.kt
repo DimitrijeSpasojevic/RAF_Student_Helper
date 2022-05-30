@@ -2,7 +2,6 @@ package rs.raf.rafstudenthelper.presentation.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers.Main
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.rafstudenthelper.R
-import rs.raf.rafstudenthelper.data.models.Note
 import rs.raf.rafstudenthelper.data.models.NoteEntity
 import rs.raf.rafstudenthelper.databinding.FragmentNotesBinding
 import rs.raf.rafstudenthelper.presentation.contract.NoteContract
@@ -23,9 +20,7 @@ import rs.raf.rafstudenthelper.presentation.view.activities.NewNoteActivity
 import rs.raf.rafstudenthelper.presentation.view.recycler.adapter.NoteAdapter
 import rs.raf.rafstudenthelper.presentation.view.recycler.consumer.ClickConsumer
 import rs.raf.rafstudenthelper.presentation.view.states.NotesState
-import rs.raf.rafstudenthelper.presentation.view.states.UpdateNoteState
 import rs.raf.rafstudenthelper.presentation.viewmodel.NoteViewModel
-import java.util.*
 
 class InputFragment : Fragment(R.layout.fragment_notes) {
 
