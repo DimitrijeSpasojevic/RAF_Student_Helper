@@ -1,12 +1,12 @@
 package rs.raf.rafstudenthelper.data.repositories
 
-import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Observable
 import rs.raf.rafstudenthelper.data.datasources.local.NoteDao
 import rs.raf.rafstudenthelper.data.models.Note
 import rs.raf.rafstudenthelper.data.models.NoteEntity
 import rs.raf.rafstudenthelper.data.models.NoteWithId
+import java.sql.Date
 
 class NoteRepositoryImpl(
     private val localDataSource: NoteDao
@@ -40,6 +40,16 @@ class NoteRepositoryImpl(
     override fun getUnArchived(name: String): Observable<List<NoteWithId>> {
         return localDataSource
             .getUnArchived(name)
+            .map {
+                it.map {
+                    NoteWithId(it.id, it.title, it.content, it.isArchived, it.date)
+                }
+            }
+    }
+
+    override fun getUnNotesBtweenDates(startDate: Date, endDate: Date): Observable<List<NoteWithId>> {
+        return localDataSource
+            .getNotesBetweenDate(startDate,endDate)
             .map {
                 it.map {
                     NoteWithId(it.id, it.title, it.content, it.isArchived, it.date)

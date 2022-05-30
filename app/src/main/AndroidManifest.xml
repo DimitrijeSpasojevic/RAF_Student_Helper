@@ -14,7 +14,8 @@
         android:theme="@style/Theme.Vezbe11" >
         <activity android:name=".presentation.view.activities.NewNoteActivity"/>
         <activity android:name=".presentation.view.activities.EditNoteActivity"/>
-        <activity android:name="rs.raf.rafstudenthelper.presentation.view.activities.MainActivity"
+        <activity android:name=".presentation.view.activities.LoginActivity"/>
+        <activity android:name=".presentation.view.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

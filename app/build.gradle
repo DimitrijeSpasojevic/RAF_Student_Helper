@@ -35,6 +35,10 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -101,9 +105,25 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // Moshi
-    def moshiVersion = '1.12.0'
+    def moshiVersion = '1.13.0'
     implementation "com.squareup.moshi:moshi-adapters:$moshiVersion"
     // Do not update codegen version it will produce compile error when used with moshi retrofit converter!
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
+
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 }

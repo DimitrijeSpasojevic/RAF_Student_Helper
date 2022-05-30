@@ -4,6 +4,7 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import rs.raf.rafstudenthelper.data.models.NoteEntity
+import java.sql.Date
 
 @Dao
 abstract class NoteDao {
@@ -34,4 +35,7 @@ abstract class NoteDao {
 
     @Query("SELECT * FROM notes WHERE title LIKE :name || '%' AND isArchived = 0")
     abstract fun getUnArchived(name: String): Observable<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes WHERE date BETWEEN :startDate AND :endDate")
+    abstract fun getNotesBetweenDate(startDate: Date, endDate: Date ): Observable<List<NoteEntity>>
 }

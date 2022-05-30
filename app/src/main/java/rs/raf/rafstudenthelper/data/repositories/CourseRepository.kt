@@ -1,6 +1,5 @@
 package rs.raf.rafstudenthelper.data.repositories
 
-import android.graphics.Movie
 import io.reactivex.Completable
 import io.reactivex.Observable
 import rs.raf.rafstudenthelper.data.models.Course

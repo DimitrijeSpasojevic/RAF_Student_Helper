@@ -14,8 +14,10 @@ import rs.raf.rafstudenthelper.data.repositories.NoteRepository
 import rs.raf.rafstudenthelper.presentation.contract.NoteContract
 import rs.raf.rafstudenthelper.presentation.view.states.AddNoteState
 import rs.raf.rafstudenthelper.presentation.view.states.NotesState
+import rs.raf.rafstudenthelper.presentation.view.states.NotesStatisticsState
 import rs.raf.rafstudenthelper.presentation.view.states.UpdateNoteState
 import timber.log.Timber
+import java.sql.Date
 import java.util.concurrent.TimeUnit
 
 class NoteViewModel (
@@ -26,6 +28,7 @@ class NoteViewModel (
     override val notesState: MutableLiveData<NotesState> = MutableLiveData()
     override val addDone: MutableLiveData<AddNoteState> = MutableLiveData()
     override val updateNoteState: MutableLiveData<UpdateNoteState> = MutableLiveData()
+    override val notesStatisticsState: MutableLiveData<NotesStatisticsState> = MutableLiveData()
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
@@ -130,6 +133,23 @@ class NoteViewModel (
 
     override fun getUnArchive(name: String) {
         publishSubject.onNext(name)
+    }
+
+    override fun getNotesBetweenDate(startDate: Date, endDate: Date) {
+        val subscription = noteRepository
+            .getUnNotesBtweenDates(startDate, endDate)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    notesStatisticsState.value = NotesStatisticsState.Success(it)
+                },
+                {
+                    notesStatisticsState.value = NotesStatisticsState.Error("Error happened while fetching data from db")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
     }
 
     override fun addNote(note: Note) {

@@ -21,6 +21,8 @@ import rs.raf.rafstudenthelper.presentation.view.recycler.adapter.NoteAdapter
 import rs.raf.rafstudenthelper.presentation.view.recycler.consumer.ClickConsumer
 import rs.raf.rafstudenthelper.presentation.view.states.NotesState
 import rs.raf.rafstudenthelper.presentation.viewmodel.NoteViewModel
+import java.sql.Date
+import java.time.LocalDate
 
 class InputFragment : Fragment(R.layout.fragment_notes) {
 
@@ -105,6 +107,8 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
 
     private fun initObservers() {
         noteViewModel.notesState.observe(viewLifecycleOwner, Observer {
+            noteViewModel.getNotesBetweenDate(Date.valueOf(LocalDate.now().minusDays(4).toString()),
+                Date.valueOf(LocalDate.now().toString()))
             renderState(it)
         })
 

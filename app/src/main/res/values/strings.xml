@@ -2,6 +2,7 @@
     <string name="app_name">Vezbe11</string>
     <string name="courses">courses</string>
     <string name="notes">Notes</string>
+    <string name="statistics">statistics</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
     <string name="professor">Professor</string>
