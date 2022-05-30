@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import okhttp3.internal.notifyAll
 import rs.raf.rafstudenthelper.data.models.Note
 import rs.raf.rafstudenthelper.data.models.NoteEntity
 import rs.raf.rafstudenthelper.data.repositories.NoteRepository
@@ -34,7 +35,7 @@ class NoteViewModel (
             .distinctUntilChanged()
             .switchMap {
                 noteRepository
-                    .getAllByName(it)
+                    .getUnArchived(it)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -53,6 +54,23 @@ class NoteViewModel (
             )
         subscriptions.add(subscription)
     }
+
+//    override fun getUnArchive(name: String) {
+//        val subscription = noteRepository
+//            .getUnArchived(name)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(
+//                {
+//                    notesState.value = NotesState.Success(it)
+//                },
+//                {
+//                    notesState.value = NotesState.Error("Error happened while fetching data from db")
+//                    Timber.e(it)
+//                }
+//            )
+//        subscriptions.add(subscription)
+//    }
 
     override fun deleteNote(note: NoteEntity) {
         val subscription = noteRepository
@@ -80,7 +98,6 @@ class NoteViewModel (
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    notesState.value = NotesState.Loading
                     updateNoteState.value = UpdateNoteState.Success
                 },
                 {
@@ -89,12 +106,13 @@ class NoteViewModel (
                 }
             )
         subscriptions.add(subscription)
-        getAllNotes()
     }
 
-    override fun getAllNotes() {
+
+
+    override fun getArchive(name: String) {
         val subscription = noteRepository
-            .getAll()
+            .getArchived(name)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -109,7 +127,8 @@ class NoteViewModel (
         subscriptions.add(subscription)
     }
 
-    override fun getNotesByName(name: String) {
+
+    override fun getUnArchive(name: String) {
         publishSubject.onNext(name)
     }
 

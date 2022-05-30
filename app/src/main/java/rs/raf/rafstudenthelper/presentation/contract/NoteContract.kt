@@ -15,10 +15,10 @@ interface NoteContract {
         val addDone: LiveData<AddNoteState>
         val updateNoteState: LiveData<UpdateNoteState>
 
-        fun getAllNotes()
-        fun getNotesByName(name: String)
         fun addNote(note: Note)
         fun deleteNote(note: NoteEntity)
         fun updateNote(note: NoteEntity)
+        fun getArchive(name: String)
+        fun getUnArchive(name: String)
     }
 }

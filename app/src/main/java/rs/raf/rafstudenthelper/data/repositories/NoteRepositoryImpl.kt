@@ -11,25 +11,6 @@ class NoteRepositoryImpl(
     private val localDataSource: NoteDao
 ) : NoteRepository {
 
-    override fun getAll(): Observable<List<NoteWithId>> {
-        return localDataSource
-            .getAll()
-            .map {
-                it.map {
-                    NoteWithId(it.id,it.title,it.content,it.isArchived)
-                }
-            }
-    }
-
-    override fun getAllByName(name: String): Observable<List<NoteWithId>> {
-        return localDataSource
-            .getByName(name)
-            .map {
-                it.map {
-                    NoteWithId(it.id,it.title,it.content, it.isArchived)
-                }
-            }
-    }
 
     override fun insert(note: Note): Completable {
         val noteEntity = NoteEntity(title = note.title, content = note.content, isArchived = false)
@@ -43,5 +24,25 @@ class NoteRepositoryImpl(
 
     override fun updateNote(note: NoteEntity): Completable {
         return localDataSource.update(note)
+    }
+
+    override fun getArchived(name: String): Observable<List<NoteWithId>> {
+        return localDataSource
+            .getArchived(name)
+            .map {
+                it.map {
+                    NoteWithId(it.id,it.title,it.content, it.isArchived)
+                }
+            }
+    }
+
+    override fun getUnArchived(name: String): Observable<List<NoteWithId>> {
+        return localDataSource
+            .getUnArchived(name)
+            .map {
+                it.map {
+                    NoteWithId(it.id,it.title,it.content, it.isArchived)
+                }
+            }
     }
 }

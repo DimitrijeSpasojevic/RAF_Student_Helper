@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +36,7 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    private var isArchivedShowed : Boolean = false
     private lateinit var adapter: NoteAdapter
 
 
@@ -65,23 +66,23 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
             activity?.startActivity(intent)
         }
 
-//        binding.addBtn.setOnClickListener {
-//            val input = binding.inputEt.text.toString()
-//            if (input.isBlank()) {
-//                Toast.makeText(context, "Input cannot be empty!", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
-//            binding.inputEt.text.clear()
-//
-//            val temp: UUID = UUID.randomUUID()
-//
-//            val movieToAdd = Movie(
-//                id = Long.toHexString(temp.mostSignificantBits)
-//                        + Long.toHexString(temp.leastSignificantBits),
-//                title = input
-//            )
-//            mainViewModel.addMovie(movieToAdd)
-//        }
+        binding.swButton.setOnClickListener{
+            if (isArchivedShowed){
+                noteViewModel.getUnArchive(binding.filterNote.text.toString())
+            }else{
+                noteViewModel.getArchive(binding.filterNote.text.toString())
+            }
+            isArchivedShowed = !isArchivedShowed
+        }
+
+        binding.filterNote.doAfterTextChanged {
+            val filter = it.toString()
+            if (isArchivedShowed){
+                noteViewModel.getArchive(filter)
+            }else{
+                noteViewModel.getUnArchive(filter)
+            }
+        }
     }
 
     private fun initRecycler() {
@@ -122,14 +123,18 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
 //                }
 //            }
 //        })
-
-        noteViewModel.getAllNotes()
+        if(isArchivedShowed){
+            noteViewModel.getArchive("")
+        }else
+        {
+            noteViewModel.getUnArchive("")
+        }
     }
 
     private fun renderState(state: NotesState) {
         when(state) {
             is NotesState.Success -> {
-                Toast.makeText(context, "Notes Succesed", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Render state se desio", Toast.LENGTH_SHORT)
                     .show()
                 adapter.submitList(state.notes)
             }

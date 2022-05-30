@@ -17,9 +17,6 @@ abstract class NoteDao {
     @Delete
     abstract fun deleteNote(note: NoteEntity): Completable
 
-    @Query("SELECT * FROM notes")
-    abstract fun getAll(): Observable<List<NoteEntity>>
-
     @Query("DELETE FROM courses")
     abstract fun deleteAll()
 
@@ -32,4 +29,9 @@ abstract class NoteDao {
     @Query("SELECT * FROM notes WHERE title LIKE :name || '%'")
     abstract fun getByName(name: String): Observable<List<NoteEntity>>
 
+    @Query("SELECT * FROM notes WHERE title LIKE :name || '%' AND isArchived = 1")
+    abstract fun getArchived(name: String): Observable<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes WHERE title LIKE :name || '%' AND isArchived = 0")
+    abstract fun getUnArchived(name: String): Observable<List<NoteEntity>>
 }
