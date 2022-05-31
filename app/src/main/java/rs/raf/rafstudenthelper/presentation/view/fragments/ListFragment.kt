@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.rafstudenthelper.R
 import rs.raf.rafstudenthelper.databinding.FragmentListBinding
+import rs.raf.rafstudenthelper.modules.noteModule
 import rs.raf.rafstudenthelper.presentation.contract.MainContract
 import rs.raf.rafstudenthelper.presentation.view.recycler.adapter.MovieAdapter
 import rs.raf.rafstudenthelper.presentation.view.states.CoursesState
@@ -123,6 +124,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             if(!spinnerIsSet)
                 initSpinner(it)
         })
+
+
+
         // Pravimo subscription kad observablu koji je vezan za getAll iz baze
         // Na svaku promenu tabele, obserrvable ce emitovati na onNext sve elemente
         // koji zadovoljavaju query
@@ -152,6 +156,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             }
             is CoursesState.Loading -> {
                 showLoadingState(true)
+                Log.e("Loadnig", "Desava se loadin state")
             }
         }
     }

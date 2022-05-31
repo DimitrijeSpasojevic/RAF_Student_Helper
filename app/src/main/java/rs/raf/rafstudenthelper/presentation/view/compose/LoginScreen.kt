@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun showLogin() {
+fun showLogin(onClick: (String,String) -> Unit) {
 
     Column(
         modifier = Modifier.padding(20.dp),
@@ -50,7 +50,7 @@ fun showLogin() {
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { },
+                onClick = { onClick(password.value.text, username.value.text) },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()

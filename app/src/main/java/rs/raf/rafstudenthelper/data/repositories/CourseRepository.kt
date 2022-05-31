@@ -12,6 +12,7 @@ interface CourseRepository {
     fun getAllFiltered(name: String, group: String, day: String, professor: String): Observable<List<Course>>
     fun getAllByName(name: String): Observable<List<Course>>
     fun insert(course: Course): Completable
+    fun insertAll(courses: List<Course>): Completable
     fun getAllGroups(): Observable<List<String>>
     fun getAllDays(): Observable<List<String>>
 

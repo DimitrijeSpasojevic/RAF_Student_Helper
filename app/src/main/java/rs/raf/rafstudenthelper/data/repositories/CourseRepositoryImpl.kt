@@ -82,6 +82,17 @@ class CourseRepositoryImpl(
             }
     }
 
+    override fun insertAll(courses: List<Course>): Completable {
+        val courseEntities =
+        courses.map {
+            CourseEntity(predmet = it.predmet, tip = it.tip,
+                nastavnik = it.nastavnik, grupe = it.grupe, dan = it.dan, termin = it.termin,
+                ucionica = it.ucionica)
+        }
+        return localDataSource
+            .insertAll(courseEntities)
+    }
+
     override fun getAllByName(name: String): Observable<List<Course>> {
         return localDataSource
             .getByName(name)

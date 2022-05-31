@@ -1,14 +1,12 @@
 package rs.raf.rafstudenthelper.presentation.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import org.koin.core.KoinApplication.Companion.init
 import rs.raf.rafstudenthelper.data.models.Course
 import rs.raf.rafstudenthelper.data.models.Resource
 import rs.raf.rafstudenthelper.data.repositories.CourseRepository
@@ -72,8 +70,9 @@ class MainViewModel(
                     }
                 },
                 {
-                    coursesState.value = CoursesState.Error("Error happened while fetching data from the server")
+                    coursesState.value = CoursesState.Error("Error happened while fetching data from the server, dobijate podatke iz baze")
                     Timber.e(it)
+                    getAllCourses()
                 }
             )
         subscriptions.add(subscription)
@@ -135,6 +134,23 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    fun insertAll(courses : List<Course>) {
+        val subscription = courseRepository
+            .insertAll(courses)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    addDone.value = AddCourseState.Success
+                },
+                {
+                    addDone.value = AddCourseState.Error("Error happened while adding course")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun getAllDays() {
         val subscription = courseRepository
             .getAllDays()
@@ -143,7 +159,6 @@ class MainViewModel(
             .subscribe(
                 {
                     days = it
-                    Log.e("tag2", "ovde2 " + days)
                 },
                 {
                     Timber.e(it)

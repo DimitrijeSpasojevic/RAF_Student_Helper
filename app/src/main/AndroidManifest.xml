@@ -14,9 +14,10 @@
         android:theme="@style/Theme.Vezbe11" >
         <activity android:name=".presentation.view.activities.NewNoteActivity"/>
         <activity android:name=".presentation.view.activities.EditNoteActivity"/>
-        <activity android:name=".presentation.view.activities.LoginActivity"/>
-        <activity android:name=".presentation.view.activities.MainActivity"
-            android:exported="true">
+        <activity android:name=".presentation.view.activities.MainActivity"/>
+        <activity android:name=".presentation.view.activities.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.StartingSpash.Vezbe11">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

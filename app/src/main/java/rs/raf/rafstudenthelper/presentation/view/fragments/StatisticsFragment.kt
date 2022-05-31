@@ -66,7 +66,7 @@ class StatisticsFragment : Fragment() {
     private fun renderState(state: NotesStatisticsState) {
         when(state) {
             is NotesStatisticsState.Success -> {
-                Toast.makeText(context, "Dodao", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Statistika update", Toast.LENGTH_SHORT)
                     .show()
             }
             is NotesStatisticsState.Error -> Toast.makeText(context, "Error happened", Toast.LENGTH_SHORT)

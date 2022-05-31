@@ -15,6 +15,7 @@ interface MainContract {
         var days : List<String>
         var groups : List<String>
 
+
         fun fetchAllCourses()
         fun getAllCourses()
         fun getCoursesByName(name: String)
