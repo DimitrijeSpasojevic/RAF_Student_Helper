@@ -132,7 +132,21 @@ class NoteViewModel (
 
 
     override fun getUnArchive(name: String) {
-        publishSubject.onNext(name)
+//        publishSubject.onNext(name)
+        val subscription = noteRepository
+            .getUnArchived(name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    notesState.value = NotesState.Success(it)
+                },
+                {
+                    notesState.value = NotesState.Error("Error happened while fetching data from db")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
     }
 
     override fun getNotesBetweenDate(startDate: Date, endDate: Date) {

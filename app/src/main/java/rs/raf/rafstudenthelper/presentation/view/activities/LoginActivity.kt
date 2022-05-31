@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.koin.android.ext.android.inject
 import rs.raf.rafstudenthelper.presentation.view.compose.showLogin
 import timber.log.Timber
@@ -26,7 +25,6 @@ class LoginActivity : AppCompatActivity() {
     private val sharedPref by inject<SharedPreferences>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initSplash()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -44,32 +42,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun initSplash() {
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition {
-            checkIfUserLog()
-            false
-        }
-
-    }
-
-    private fun checkIfUserLog(){
-        name = sharedPref.getString(prefKeyName, null)
-        if(name != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
     private fun login(name: String, password: String) {
         sharedPref
             .edit()
             .putString(prefKeyName, name)
             .putString(prefKeyPass, password)
             .apply()
-        val intent = Intent (this, MainActivity::class.java)
-        startActivity(intent)
+
+        if (password == validPassword) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
-
-
 }

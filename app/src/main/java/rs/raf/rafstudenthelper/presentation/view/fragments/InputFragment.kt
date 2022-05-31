@@ -107,10 +107,11 @@ class InputFragment : Fragment(R.layout.fragment_notes) {
 
     private fun initObservers() {
         noteViewModel.notesState.observe(viewLifecycleOwner, Observer {
-            noteViewModel.getNotesBetweenDate(Date.valueOf(LocalDate.now().minusDays(4).toString()),
-                Date.valueOf(LocalDate.now().toString()))
+//            noteViewModel.getNotesBetweenDate(Date.valueOf(LocalDate.now().minusDays(4).toString()),
+//                Date.valueOf(LocalDate.now().toString()))
             renderState(it)
         })
+
 
 //        noteViewModel.updateNoteState.observe(viewLifecycleOwner, Observer {
 //            when(it){
